@@ -1,5 +1,6 @@
 package com.project.labapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +34,21 @@ public class User {
 
     String password;
 
-    Long roleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="role_id", nullable = false)
+    @JsonIgnore   //ignore etmek
+    Role role;
 
+    public Long getRoleId() {
+        return role != null ? role.getRoleId() : null;
+    }
 
-
+    public void setRoleId(Long roleId) {
+        if (role == null) {
+            role = new Role();
+        }
+        role.setRoleId(roleId);
+    }
 
 
 }
