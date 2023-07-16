@@ -30,22 +30,12 @@ public class Report {
     @JsonIgnore   //ignore etmek
     User user;
 
-    public Long getUserId() {
-        return user != null ? user.getId() : null;
-    }
-
-    public void setUserId(Long userId) {
-        if (user == null) {
-            user = new User();
-        }
-        user.setId(userId);
-    }
 
     String diagnosisMade;
 
     String diagnosisDetail;
 
-
+    @Temporal(TemporalType.TIMESTAMP)
     Date reportDate;
 
     String reportImage;
@@ -56,14 +46,4 @@ public class Report {
     @JsonIgnore   //ignore etmek
     Patient patient;
 
-    public Long getPatientId() {
-        return patient != null ? patient.getPatientId() : null;
-    }
-
-    public void setPatientId(Long patientId) {
-        if (patient == null) {
-            patient = new Patient();
-        }
-        patient.setPatientId(patientId);
-    }
 }

@@ -1,7 +1,7 @@
 package com.project.labapp.controllers;
 
 import com.project.labapp.entities.Report;
-import com.project.labapp.entities.User;
+import com.project.labapp.requests.ReportCreateRequest;
 import com.project.labapp.services.ReportService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,23 +18,29 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    //@GetMapping
+    //public List<Report> getAllReports(){
+    //    return reportService.getAllReports();
+    //}
+
     @GetMapping
-    public List<Report> getAllReports(){
-        return reportService.getAllReports();
+    public List<Report> getAllReports(@RequestParam Optional<Long> userId){
+        return reportService.getAllReports(userId);
     }
 
-    //@GetMapping
-    //public List<Report> getAllReportsUserId(@RequestParam Optional<Long> userId){
-    //    return reportService.getAllReportsUserId(userId);
+    //@GetMapping("/patient/{patientId}")
+    //public List<Report> getAllReportsByPatientId(@PathVariable Optional<Long> patientId){
+    //    return reportService.getAllReportsByPatientId(patientId);
     //}
-    @GetMapping("/{patientId}")
-    public List<Report> getAllReports(@PathVariable Optional<Long> patientId){
-        return reportService.getAllReports(patientId);
+
+    @GetMapping("/patient/{patientId}")
+    public List<Report> getAllReportsByPatientId(@PathVariable Optional<Long> patientId){
+        return reportService.getAllReportsByPatientId(patientId);
     }
 
     @PostMapping
-    public Report createOneReport(@RequestBody Report newReport){
-        return reportService.createOneReport(newReport);
+    public Report createOneReport(@RequestBody ReportCreateRequest newReportRequest){
+        return reportService.createOneReport(newReportRequest);
     }
 
     @GetMapping("/{reportId}")
