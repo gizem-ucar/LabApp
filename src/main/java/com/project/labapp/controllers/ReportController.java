@@ -1,6 +1,7 @@
 package com.project.labapp.controllers;
 
 import com.project.labapp.entities.Report;
+import com.project.labapp.entities.User;
 import com.project.labapp.services.ReportService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,14 @@ public class ReportController {
     }
 
     @GetMapping
-    public List<Report> getAllReportsUserId(@RequestParam Optional<Long> userId){
-        return reportService.getAllReportsUserId(userId);
+    public List<Report> getAllReports(){
+        return reportService.getAllReports();
     }
+
+    //@GetMapping
+    //public List<Report> getAllReportsUserId(@RequestParam Optional<Long> userId){
+    //    return reportService.getAllReportsUserId(userId);
+    //}
     @GetMapping("/{patientId}")
     public List<Report> getAllReports(@PathVariable Optional<Long> patientId){
         return reportService.getAllReports(patientId);

@@ -20,15 +20,26 @@ import java.util.Date;
 public class Report {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long reportId;
 
     String fileNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore   //ignore etmek
     User user;
+
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
+    }
+
+    public void setUserId(Long userId) {
+        if (user == null) {
+            user = new User();
+        }
+        user.setId(userId);
+    }
 
     String diagnosisMade;
 
