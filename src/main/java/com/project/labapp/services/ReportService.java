@@ -5,6 +5,7 @@ import com.project.labapp.entities.Report;
 import com.project.labapp.entities.User;
 import com.project.labapp.repos.ReportRepository;
 import com.project.labapp.requests.ReportCreateRequest;
+import com.project.labapp.requests.ReportUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,5 +62,23 @@ public class ReportService {
         toSave.setUser(user);
         toSave.setPatient(patient);
         return reportRepository.save(toSave);
+    }
+
+    public Report updateOneReportById(Long reportId, ReportUpdateRequest updateReport) {
+        Optional<Report> report = reportRepository.findById(reportId);
+        if (report.isPresent()){
+            Report toUpdate = report.get();
+            toUpdate.setDiagnosisMade(updateReport.getDiagnosisMade());
+            toUpdate.setDiagnosisDetail(updateReport.getDiagnosisDetail());
+            toUpdate.setReportImage(updateReport.getReportImage());
+            reportRepository.save(toUpdate);
+            return toUpdate;
+        }
+        return null;
+    }
+
+    public Report deleteOneReportById(Long reportId) {
+        reportRepository.deleteById(reportId);
+        return null;
     }
 }

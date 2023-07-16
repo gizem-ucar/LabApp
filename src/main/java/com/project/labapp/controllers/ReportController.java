@@ -2,6 +2,7 @@ package com.project.labapp.controllers;
 
 import com.project.labapp.entities.Report;
 import com.project.labapp.requests.ReportCreateRequest;
+import com.project.labapp.requests.ReportUpdateRequest;
 import com.project.labapp.services.ReportService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,20 +19,10 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    //@GetMapping
-    //public List<Report> getAllReports(){
-    //    return reportService.getAllReports();
-    //}
-
     @GetMapping
     public List<Report> getAllReports(@RequestParam Optional<Long> userId){
         return reportService.getAllReports(userId);
     }
-
-    //@GetMapping("/patient/{patientId}")
-    //public List<Report> getAllReportsByPatientId(@PathVariable Optional<Long> patientId){
-    //    return reportService.getAllReportsByPatientId(patientId);
-    //}
 
     @GetMapping("/patient/{patientId}")
     public List<Report> getAllReportsByPatientId(@PathVariable Optional<Long> patientId){
@@ -48,4 +39,13 @@ public class ReportController {
         return reportService.getOneReportById(reportId);
     }
 
+    @PutMapping("/{reportId}")
+    public Report updateOneReport(@PathVariable Long reportId, @RequestBody ReportUpdateRequest updateReport){
+        return reportService.updateOneReportById(reportId, updateReport);
+    }
+
+    @DeleteMapping("/{reportId}")
+    public Report deleteOneReport(@PathVariable Long reportId){
+        return reportService.deleteOneReportById(reportId);
+    }
 }
