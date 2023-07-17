@@ -6,10 +6,12 @@ import com.project.labapp.entities.User;
 import com.project.labapp.repos.ReportRepository;
 import com.project.labapp.requests.ReportCreateRequest;
 import com.project.labapp.requests.ReportUpdateRequest;
+import com.project.labapp.responses.ReportResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -28,16 +30,23 @@ public class ReportService {
     }
 
 
-    public List<Report> getAllReportsByPatientId(Optional<Long> patientId){
-        if (patientId.isPresent())
-            return reportRepository.findByPatientPatientId(patientId.get());
-        return reportRepository.findAll();
-    }
+    //public List<Report> getAllReportsByPatientId(Optional<Long> patientId){
+    //    if (patientId.isPresent())
+    //        return reportRepository.findByPatientPatientId(patientId.get());
+    //    return reportRepository.findAll();
+    //}
 
-    public List<Report> getAllReports(Optional<Long> userId){
-        if (userId.isPresent())
-            return reportRepository.findByUserId(userId.get());
-        return reportRepository.findAll();
+    public List<ReportResponse> getAllReports(Optional<Long> userId, Optional<Long> patientId){
+        List<Report> list;
+        if (userId.isPresent() && patientId.isPresent()){
+            list = reportRepository.findByUserIdAndPatientPatientId(userId.get(), patientId.get());
+        }else if (userId.isPresent()){
+            list = reportRepository.findByUserId(userId.get());
+        }else if(patientId.isPresent()){
+            list = reportRepository.findByPatientPatientId(patientId.get());
+        }else
+            list = reportRepository.findAll();
+        return list.stream().map(r -> new ReportResponse(r)).collect(Collectors.toList());
     }
 
     public Report getOneReportById(Long reportId) {
@@ -46,12 +55,15 @@ public class ReportService {
 
     public Report createOneReport(ReportCreateRequest newReportRequest) {
 
-        User user = userService.getOneUser(newReportRequest.getUserId());
+        User user = userService.getOneUserById(newReportRequest.getUserId());
         if (user == null)
             return null;
-        Patient patient = patientService.getOnePatient(newReportRequest.getPatientId());
+        Patient patient = patientService.getOnePatientById(newReportRequest.getPatientId());
         if (patient == null)
             return null;
+        //if (user != null && patient != null){
+            //
+        //}
         Report toSave = new Report();
         toSave.setReportId(newReportRequest.getReportId());
         toSave.setFileNo(newReportRequest.getFileNo());
