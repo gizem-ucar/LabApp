@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapor detay</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+
+<div class="header">
+    <div class="elemanter-container">
+        <div class="elemanter-row">
+            <section>
+                <div class="header-logo">Laboratory Reporting</div>
+                <div class="header-menu">
+                    <ul>
+                        <a th:href="@{home}" ><li>Home</li></a>
+                        <a th:href="@{myReports}" ><li>My Reports</li></a>
+                        <a th:href="@{reports}" ><li>Reports</li></a>
+                        <a th:href="@{patients}" ><li>Patients</li></a>
+                    </ul>
+                </div>
+                <div class="header-profile">
+                    <a th:href="@{profile}" >
+                        <i class="fa-regular fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div class="report-detail">
+    <div class="report-detail-container">
+        <div class="report-detail-row">
+            <div><img :src="this.reportDetail.reportImage" alt=""></div>
+            <div class="report-information">
+                <div class="file-number">
+                    File number: {{this.reportDetail.fileNo}}
+                </div>
+                <div class="diagnosisMade">
+                    Diagnosis Made: {{this.reportDetail.diagnosisMade}}
+                </div>
+                <div class="diagnosisDetail">
+                    Diagnosis Detail: {{this.reportDetail.diagnosisDetail}}
+                </div>
+                <div class="reportDate">
+                    Report Date: {{this.reportDetail.reportDate}}
+                </div>
+                <div class="patientTC">
+                    Patient TC: {{this.reportDetail.patientTC}}
+                </div>
+                <div class="patientName">
+                    Patient Name: {{this.reportDetail.patientFirstName}} {{this.reportDetail.patientLastName}}
+                </div>
+            </div>
+            <div>
+                <button class="button">Sil</button>
+                <button class="button" th:href="@{reportUpdate}">Düzenle</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="footer-logo">
+        <a th:href="@{home}">
+            Laboratory Reporting
+        </a>
+    </div>
+    <div></div>
+</footer>
+
+
+</body>
+</html>

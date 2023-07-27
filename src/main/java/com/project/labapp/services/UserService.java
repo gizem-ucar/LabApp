@@ -1,7 +1,10 @@
 package com.project.labapp.services;
 
+import com.project.labapp.entities.Role;
 import com.project.labapp.entities.User;
 import com.project.labapp.repos.UserRepository;
+import com.project.labapp.requests.UserRegisterRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +14,13 @@ import java.util.Optional;
 public class UserService {
     UserRepository userRepository;
 
-    public UserService(UserRepository userRepository){
+    private PasswordEncoder passwordEncoder;
+    private RoleService roleService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
 
@@ -28,18 +36,22 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public User updateOneUser(Long userId, User newUser) {
+    public User updateOneUser(Long userId, UserRegisterRequest newUser) {
         Optional<User> user = userRepository.findById(userId);
+
+        Role role = roleService.getOneRoleById(newUser.getRoleId());
+        if (role == null)
+            return null;
+
         if (user.isPresent()){
             User foundUser = user.get();
             foundUser.setUserName(newUser.getUserName());
             foundUser.setUserTC(newUser.getUserTC());
             foundUser.setEmail(newUser.getEmail());
-            foundUser.setUserImage(newUser.getUserImage());
             foundUser.setUserFirstName(newUser.getUserFirstName());
             foundUser.setUserLastName(newUser.getUserLastName());
-            foundUser.setPassword(newUser.getPassword());
-            foundUser.setRoleId(newUser.getRoleId());
+            foundUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+            foundUser.setRole(role);
             userRepository.save(foundUser);
             return foundUser;
         }else

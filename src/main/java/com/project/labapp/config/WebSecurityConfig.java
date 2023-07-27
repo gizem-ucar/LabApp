@@ -51,7 +51,7 @@ public class WebSecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false); // allowCredentials değerini false olarak ayarlayın
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("OPTIONS");
@@ -74,8 +74,12 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(handler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                //.antMatchers("/users/**")
-                //.permitAll()
+                .antMatchers("/web/**")
+                .permitAll()
+                .antMatchers("/static/**")
+                .permitAll()
+                .antMatchers("/images/**")
+                .permitAll()
                 .antMatchers(HttpMethod.GET,"/reports")
                 .permitAll()
                 .antMatchers(HttpMethod.GET,"/patients")

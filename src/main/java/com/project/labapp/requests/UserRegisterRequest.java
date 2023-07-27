@@ -12,4 +12,9 @@ public class UserRegisterRequest {
     String userTC;
     String email;
     Long roleId;
+    String roleName;
+
+    public UserRegisterRequest(){
+        super();
+    }
 }

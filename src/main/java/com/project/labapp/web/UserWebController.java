@@ -1,46 +1,44 @@
-package com.project.labapp.controllers;
+package com.project.labapp.web;
 
 import com.project.labapp.entities.User;
-import com.project.labapp.repos.UserRepository;
 import com.project.labapp.requests.UserRegisterRequest;
 import com.project.labapp.services.UserService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@RestController
-@RequestMapping("/users")
-public class UserController {
+@Controller
+public class UserWebController {
 
     private UserService userService;
 
-    public UserController(UserService userService){
+    public UserWebController(UserService userService){
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/web/users")
     public List<User> getAllUsers(){
         return userService.getAllUsers();
     }
 
-    @PostMapping
+    @PostMapping("/web/users")
     public User createUser(@RequestBody User newUser){
         return userService.saveOneUser(newUser);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/web/users/{userId}")
     public User getOneUser(@PathVariable Long userId){
         //custom exception
         return userService.getOneUserById(userId);
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/web/users/{userId}")
     public User updateOneUser(@PathVariable Long userId, @RequestBody UserRegisterRequest newUser){
         return userService.updateOneUser(userId, newUser);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/web/users/{userId}")
     public void deleteOneUser(@PathVariable Long userId) {
         userService.deleteById(userId);
     }

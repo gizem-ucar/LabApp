@@ -5,8 +5,14 @@ import com.project.labapp.requests.ReportCreateRequest;
 import com.project.labapp.requests.ReportUpdateRequest;
 import com.project.labapp.responses.ReportResponse;
 import com.project.labapp.services.ReportService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +36,73 @@ public class ReportController {
     //    return reportService.getAllReportsByPatientId(patientId);
     //}
 
-    @PostMapping
-    public Report createOneReport(@RequestBody ReportCreateRequest newReportRequest){
-        return reportService.createOneReport(newReportRequest);
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<Report> createOneReport(
+            @RequestParam("file") MultipartFile reportImageFile,
+            @ModelAttribute ReportCreateRequest newReportRequest
+    ) {
+        newReportRequest.setReportImageFile(reportImageFile);
+
+        Date reportDate = newReportRequest.getReportDate();
+        newReportRequest.setReportDate(reportDate);
+
+        Report createdReport = reportService.createOneReport(newReportRequest);
+
+        if (createdReport != null) {
+            return ResponseEntity.ok(createdReport);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
+    /*@PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<Report> createOneReport(@ModelAttribute ReportCreateRequest newReportRequest){
+
+        Date reportDate = newReportRequest.getReportDate();
+        newReportRequest.setReportDate(reportDate);
+
+        MultipartFile imageFile = newReportRequest.getReportImageFile();
+        newReportRequest.setReportImageFile(imageFile);
+
+        //String reportName = reportService.saveImage(newReportRequest.getReportImageFile());
+        Report createdReport = reportService.createOneReport(newReportRequest);
+
+        if (createdReport != null)
+        {
+            return ResponseEntity.ok(createdReport);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+    /*@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Report> createOneReport(@RequestParam("fileNo") String fileNo,
+                                                  @RequestParam("userId") Long userId,
+                                                  @RequestParam("patientId") Long patientId,
+                                                  @RequestParam("diagnosisMade") String diagnosisMade,
+                                                  @RequestParam("diagnosisDetail") String diagnosisDetail,
+                                                  @RequestParam("reportDate") Date reportDate,
+                                                  @RequestParam("reportImageFile") MultipartFile reportImageFile) {
+
+        ReportCreateRequest newReportRequest = new ReportCreateRequest();
+        newReportRequest.setFileNo(fileNo);
+        newReportRequest.setUserId(userId);
+        newReportRequest.setDiagnosisMade(diagnosisMade);
+        newReportRequest.setDiagnosisDetail(diagnosisDetail);
+        newReportRequest.setReportDate(reportDate);
+        newReportRequest.setReportImageFile(reportImageFile);
+
+        Report createdReport = reportService.createOneReport(newReportRequest, reportImageFile);
+
+        if (createdReport != null) {
+            return ResponseEntity.ok(createdReport);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    } */
+
     @GetMapping("/{reportId}")
-    public Report getOneReport(@PathVariable Long reportId){
+    public ReportResponse getOneReport(@PathVariable Long reportId){
         return reportService.getOneReportById(reportId);
     }
 

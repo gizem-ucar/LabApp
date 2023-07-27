@@ -39,16 +39,16 @@ public class User {
     @JsonIgnore   //ignore etmek
     Role role;
 
-    public Long getRoleId() {
-        return role != null ? role.getRoleId() : null;
-    }
+    //public Long getRoleId() {
+    //    return role != null ? role.getRoleId() : null;
+    //}
 
-    public void setRoleId(Long roleId) {
-        if (role == null) {
-            role = new Role();
-        }
-        role.setRoleId(roleId);
-    }
+    //public void setRoleId(Long roleId) {
+    //    if (role == null) {
+    //        role = new Role();
+    //    }
+    //    role.setRoleId(roleId);
+    //}
 
 
 }

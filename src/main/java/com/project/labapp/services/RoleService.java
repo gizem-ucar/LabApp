@@ -18,4 +18,8 @@ public class RoleService {
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
+
+    public Role getOneRoleById(Long roleId) {
+        return roleRepository.findById(roleId).orElse(null);
+    }
 }

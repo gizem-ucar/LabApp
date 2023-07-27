@@ -6,4 +6,8 @@ import lombok.Data;
 public class UserLoginRequest {
     String userName;
     String password;
+
+    public UserLoginRequest(){
+        super();
+    }
 }

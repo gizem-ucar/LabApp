@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hastalar</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<div class="header">
+    <div class="elemanter-container">
+        <div class="elemanter-row">
+            <section>
+                <div class="header-logo">Laboratory Reporting</div>
+                <div class="header-menu">
+                    <ul>
+                        <a th:href="@{home}" ><li>Home</li></a>
+                        <a th:href="@{myReports}" ><li>My Reports</li></a>
+                        <a th:href="@{reports}" ><li>Reports</li></a>
+                        <a th:href="@{patients}" ><li>Patients</li></a>
+                    </ul>
+                </div>
+                <div class="header-profile">
+                    <a th:href="@{profile}" >
+                        <i class="fa-regular fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div class="patients">
+    <div class="patient-item" th:each="patient : ${patients}" th:key="${patient.patientTC}">
+        <a th:href="@{reportDetail}" >
+            <div class="patientImage"><img src="@/assets/images/pngdeneme.png" alt=""></div>
+            <div class="patient-information">
+                <div class="patientTC">
+                    Patient TC: <span th:text="${patient.patientTC}"></span>
+                </div>
+                <div class="patientFirstName">
+                    Patient Name: <span th:text="${patient.patientFirstName}"></span>
+                </div>
+                <div class="patientLastName">
+                    Patient Surname: <span th:text="${patient.patientLastName}"></span>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-logo">
+        <a th:href="@{home}">Laboratory Reporting</a>
+    </div>
+    <div></div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="../../static/style.css">
+</head>
+<body>
+
+<div class="register">
+    <div class="register-box">
+        <a :to="{ name: 'HomePage'}" >
+            <div class="register-logo">Laboratory Reporting</div>
+        </a>
+        <div class="register-input">
+
+            <!-- <div>Name <input type="text" name="" id="" placeholder="Name"></div>
+            <div>Surname <input type="text" name="" id="" placeholder="Surname"></div>
+            <div>Email <input type="email" name="" id="" placeholder="Email"></div>
+            <div>Password <input type="password" name="" id="" placeholder="Password"></div> -->
+            <form th:action="@{/web/register}" th:object="${registerRequest}" method="post">
+            <input type="text" name="userFirstName" id="userFirstName" placeholder="İsim">
+            <input type="text" name="userLastName" id="userLastName" placeholder="Soyisim">
+            <input type="text" name="userTC" id="userTC" placeholder="TC kimlik">
+            <input type="email" name="email" id="email" placeholder="Email">
+            <input type="text" name="roleId" id="roleId" placeholder="Rol">
+            <input type="text" name="userName" id="userName" placeholder="User Name">
+            <input type="password" name="password" id="password" placeholder="Password">
+
+            <div class="register-login">Kayıt olduysanız giriş yapabilirsiniz.
+                <a th:href="@{register}" >
+                    Login
+                </a>
+            </div>
+
+            <input type="submit" name="" id="" value="Kayıt Ol" class="record">
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

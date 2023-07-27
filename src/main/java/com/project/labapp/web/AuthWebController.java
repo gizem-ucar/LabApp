@@ -1,4 +1,4 @@
-package com.project.labapp.controllers;
+package com.project.labapp.web;
 
 import com.project.labapp.entities.Role;
 import com.project.labapp.entities.User;
@@ -15,14 +15,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RestController
-@RequestMapping("/auth")
-public class AuthController {
+@Controller
+public class AuthWebController {
 
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
@@ -32,7 +31,7 @@ public class AuthController {
 
     private PasswordEncoder passwordEncoder;
 
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, RoleService roleService, JwtTokenProvider jwtTokenProvider) {
+    public AuthWebController(AuthenticationManager authenticationManager, UserService userService, PasswordEncoder passwordEncoder, RoleService roleService, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -40,8 +39,13 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @PostMapping("/login")
-    public AuthResponse login(@RequestBody UserLoginRequest loginRequest){
+    @RequestMapping(value = "/web/login", method = RequestMethod.GET)
+    public String getlogin() {
+        return "Auth/login"; // login.html Thymeleaf şablonunu döndürür
+    }
+
+    @RequestMapping(value = "/web/login", method = RequestMethod.POST)
+    public String  login(@ModelAttribute(name = "loginRequest") UserLoginRequest loginRequest, Model model){
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -53,13 +57,26 @@ public class AuthController {
         authResponse.setUserId(user.getId());
         authResponse.setRoleId(user.getRole().getRoleId());
         authResponse.setRoleName(user.getRole().getRoleName());
-        return authResponse;
+
+        if (authResponse.getSuccess()){
+            return "home";
+        }
+        // Ana sayfaya yönlendirmek için redirectAttributes ile bilgileri gönder
+        model.addAttribute("invalidCredentials", true);
+
+        return "Auth/login"; // "redirect:" ile "/web/home" sayfasına yönlendir
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserRegisterRequest registerRequest){
+
+    @RequestMapping(value = "/web/register", method = RequestMethod.GET)
+    public String getregister() {
+        return "Auth/register"; // register.html Thymeleaf şablonunu döndürür
+    }
+
+    @RequestMapping(value = "/web/register", method = RequestMethod.POST)
+    public String register(@ModelAttribute(name = "registerRequest") UserRegisterRequest registerRequest, Model model){
         if (userService.getOneUserByUserName(registerRequest.getUserName()) != null)
-            return new ResponseEntity<>("Username already in use.", HttpStatus.BAD_REQUEST);
+            return "Auth/register";
         Role role = roleService.getOneRoleById(registerRequest.getRoleId());
         if (role == null)
             return null;
@@ -72,6 +89,10 @@ public class AuthController {
         user.setRole(role);
         user.setEmail(registerRequest.getEmail());
         userService.saveOneUser(user);
-        return new ResponseEntity<>("User successfully registered.", HttpStatus.CREATED);
+
+        // Ana sayfaya yönlendirmek için redirectAttributes ile bilgileri gönder
+        model.addAttribute("validCredentials", true);
+
+        return "home";
     }
 }

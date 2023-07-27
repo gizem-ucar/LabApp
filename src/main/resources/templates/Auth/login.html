@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="../../static/style.css">
+</head>
+<body>
+
+<div class="login">
+    <div class="login-box">
+        <a th:href="@{home}" >
+            <div class="login-logo">Laboratory Reporting</div>
+        </a>
+        <div class="login-input">
+
+            <!-- <div>Name <input type="text" name="" id="" placeholder="Name"></div>
+            <div>Surname <input type="text" name="" id="" placeholder="Surname"></div>
+            <div>Email <input type="email" name="" id="" placeholder="Email"></div>
+            <div>Password <input type="password" name="" id="" placeholder="Password"></div> -->
+
+            <!-- <input type="text" name="" id="" placeholder="Name">
+            <input type="text" name="" id="" placeholder="Surname"> -->
+            <form th:action="@{/web/login}" th:object="${loginRequest}" method="post">
+            <input type="text" name="userName" id="userName" placeholder="Kullanıcı adı">
+            <input type="password" name="password" id="password" placeholder="Password">
+            <div class="register-login">Kayıt olmadıysanız kayıt olabilirsiniz.
+                <a th:href="@{register}" >
+                    Register
+                </a>
+            </div>
+
+            <input type="submit" id="" value="Giriş Yap" class="record">
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

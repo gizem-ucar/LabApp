@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapor</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<div class="header">
+    <div class="elemanter-container">
+        <div class="elemanter-row">
+            <section>
+                <div class="header-logo">Laboratory Reporting</div>
+                <div class="header-menu">
+                    <ul>
+                        <a th:href="@{home}" ><li>Home</li></a>
+                        <a th:href="@{myReports}" ><li>My Reports</li></a>
+                        <a th:href="@{reports}" ><li>Reports</li></a>
+                        <a th:href="@{patients}" ><li>Patients</li></a>
+                    </ul>
+                </div>
+                <div class="header-profile">
+                    <a th:href="@{profile}" >
+                        <i class="fa-regular fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div class="report-detail">
+    <div class="report-detail-container">
+        <div class="report-detail-row">
+            <div><img :src="this.reportDetail.reportImage" alt=""></div>
+            <div class="report-information">
+                <div class="diagnosisMade">
+                    Diagnosis Made:
+                    <input type="text" v-model="reportUpdate.diagnosisMade">
+                </div>
+                <div class="diagnosisDetail">
+                    Diagnosis Detail:
+                    <input type="text" v-model="reportUpdate.diagnosisDetail">
+                </div>
+                <div class="file-number">
+                    Rapor fotoğrafı:
+                    <input type="text" v-model="reportUpdate.reportImage">
+                </div>
+            </div>
+            <div>
+                <button class="button" th:href="@{reportUpdate}">Düzenle</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="footer-logo">
+        <a th:href="@{home}">
+            Laboratory Reporting
+        </a>
+    </div>
+    <div></div>
+</footer>
+
+</body>
+</html>
