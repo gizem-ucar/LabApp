@@ -38,7 +38,10 @@ public class Report {
     @Temporal(TemporalType.TIMESTAMP)
     Date reportDate;
 
-    String reportImage;
+    //String reportImage;
+
+    @Column(name = "report_image", columnDefinition = "bytea")
+    byte[] reportImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="patient_id")

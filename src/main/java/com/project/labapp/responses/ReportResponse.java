@@ -12,7 +12,7 @@ public class ReportResponse {
     String diagnosisMade;
     String diagnosisDetail;
     Date reportDate;
-    String reportImage;
+    byte[] reportImage;
     Long userId;
     Long patientId;
     String patientTC;

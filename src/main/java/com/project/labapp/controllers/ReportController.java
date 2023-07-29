@@ -37,10 +37,10 @@ public class ReportController {
     //}
 
     @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Report> createOneReport(
+    public ResponseEntity<Report> createOneReport (
             @RequestParam("file") MultipartFile reportImageFile,
             @ModelAttribute ReportCreateRequest newReportRequest
-    ) {
+    ) throws IOException {
         newReportRequest.setReportImageFile(reportImageFile);
 
         Date reportDate = newReportRequest.getReportDate();
@@ -54,6 +54,19 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    //BYTE İLE VERİ TABANINA KAYDETME
+    /*@PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<String> addReport(@RequestParam("file") MultipartFile reportImageFile, @ModelAttribute ReportCreateRequest newReportRequest) {
+        // Image'ı projeye kaydetmek için servis metodu çağırın
+        String imagePath = reportService.saveImage(reportImageFile);
+
+        // Veritabanına image ile ilgili bilgileri kaydedin
+        newReportRequest.setImagePath(imagePath);
+        reportService.saveReport(newReportRequest);
+
+        return ResponseEntity.ok("Rapor başarıyla eklendi.");
+    }*/
 
     /*@PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<Report> createOneReport(@ModelAttribute ReportCreateRequest newReportRequest){

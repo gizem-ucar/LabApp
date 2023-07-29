@@ -66,6 +66,7 @@ public class ReportService {
         return null;
     }
 
+    //DOSYA YOLU OLUŞTURMA KAYDETME
     /*public String saveImage(MultipartFile image){
         String uploadDir = "./images";
         String filename = image.getOriginalFilename();
@@ -81,7 +82,22 @@ public class ReportService {
         }
     } */
 
-    public Report createOneReport(ReportCreateRequest newReportRequest) {
+
+    //BYTE OLARAK KAYDETME
+    /*public String saveImage(MultipartFile image) {
+        try {
+            // Image'ı projeye kaydetme işlemini gerçekleştirin
+            byte[] bytes = image.getBytes();
+            String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+            Path path = Paths.get(uploadPath + File.separator + fileName);
+            Files.write(path, bytes);
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Image kaydetme işlemi başarısız.", e);
+        }
+    }*/
+
+    public Report createOneReport(ReportCreateRequest newReportRequest) throws IOException {
 
         User user = userService.getOneUserById(newReportRequest.getUserId());
         if (user == null)
@@ -96,9 +112,9 @@ public class ReportService {
             //
         //}
 
-        // Dosya adını düzenleyin, çünkü orijinal dosya adı kullanılmadan önce kontrol edilmeli
+        /*// Dosya adını düzenleyin, çünkü orijinal dosya adı kullanılmadan önce kontrol edilmeli
         String originalFilename = StringUtils.cleanPath(newReportRequest.getReportImageFile().getOriginalFilename());
-        String uploadDir = "./static/images";
+        String uploadDir = "./images";
 
         // Dosya yolunu oluşturun
         String filename = System.currentTimeMillis() + "_" + originalFilename;
@@ -112,11 +128,14 @@ public class ReportService {
             // Hata durumunda yapılacak işlemi burada ele alabilirsiniz
             e.printStackTrace();
             return null;
-        }
+        }*/
+
+        byte[] imageBytes = newReportRequest.getReportImageFile().getBytes();
+
         Report toSave = new Report();
         toSave.setFileNo(newReportRequest.getFileNo());
         toSave.setReportDate(newReportRequest.getReportDate());
-        toSave.setReportImage("/images" + "/" + filename);
+        toSave.setReportImage(imageBytes);
         toSave.setDiagnosisMade(newReportRequest.getDiagnosisMade());
         toSave.setDiagnosisDetail(newReportRequest.getDiagnosisDetail());
         toSave.setUser(user);
@@ -157,12 +176,15 @@ public class ReportService {
     }*/
 
     public Report updateOneReportById(Long reportId, ReportUpdateRequest updateReport) {
+
+        byte[] imageBytes = updateReport.getReportImage().getBytes();
+
         Optional<Report> report = reportRepository.findById(reportId);
         if (report.isPresent()){
             Report toUpdate = report.get();
             toUpdate.setDiagnosisMade(updateReport.getDiagnosisMade());
             toUpdate.setDiagnosisDetail(updateReport.getDiagnosisDetail());
-            toUpdate.setReportImage(updateReport.getReportImage());
+            toUpdate.setReportImage(imageBytes);
             reportRepository.save(toUpdate);
             return toUpdate;
         }
