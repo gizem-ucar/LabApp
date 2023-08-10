@@ -14,6 +14,9 @@ public class ReportResponse {
     Date reportDate;
     byte[] reportImage;
     Long userId;
+    String userFirstName;
+
+    String userLastName;
     Long patientId;
     String patientTC;
     String patientFirstName;
@@ -27,9 +30,12 @@ public class ReportResponse {
         this.reportDate = entity.getReportDate();
         this.reportImage = entity.getReportImage();
         this.userId = entity.getUser().getId();
+        this.userFirstName = entity.getUser().getUserFirstName();
+        this.userLastName = entity.getUser().getUserLastName();
         this.patientId = entity.getPatient().getPatientId();
         this.patientTC = entity.getPatient().getPatientTC();
         this.patientFirstName = entity.getPatient().getPatientFirstName();
         this.patientLastName = entity.getPatient().getPatientLastName();
     }
+
 }

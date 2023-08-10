@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -194,5 +195,36 @@ public class ReportService {
     public Report deleteOneReportById(Long reportId) {
         reportRepository.deleteById(reportId);
         return null;
+    }
+
+
+    public List<ReportResponse> searchReports(String patientFirstName, String patientLastName, String patientTC, String userFirstName, String userLastName) {
+        List<Report> reports;
+
+        if (patientFirstName != null && patientLastName != null && patientTC != null && userFirstName != null && userLastName != null) {
+            reports = reportRepository.findByPatient_PatientFirstNameContainingIgnoreCaseAndPatient_PatientLastNameContainingIgnoreCaseAndPatient_PatientTCContainingIgnoreCaseAndUser_UserFirstNameContainingIgnoreCaseAndUser_UserLastNameContainingIgnoreCase(
+                    patientFirstName, patientLastName, patientTC, userFirstName, userLastName);
+        } else if (patientFirstName != null && patientLastName != null && patientTC != null) {
+            reports = reportRepository.findByPatient_PatientFirstNameContainingIgnoreCaseAndPatient_PatientLastNameContainingIgnoreCaseAndPatient_PatientTCContainingIgnoreCase(
+                    patientFirstName, patientLastName, patientTC);
+        } else if (userFirstName != null && userLastName != null) {
+            reports = reportRepository.findByUser_UserFirstNameContainingIgnoreCaseAndUser_UserLastNameContainingIgnoreCase(
+                    userFirstName, userLastName);
+        } else {
+            // Tüm raporları getir (eğer gerekirse başka bir kriter ekleyebilirsiniz)
+            reports = reportRepository.findAll();
+        }
+
+        List<ReportResponse> reportResponses = new ArrayList<>();
+
+        for (Report report : reports) {
+            reportResponses.add(new ReportResponse(report));
+        }
+
+        return reportResponses;
+    }
+
+    public List<Report> getAllReportsSortedByDate() {
+        return reportRepository.findAllByOrderByReportDateDesc();
     }
 }

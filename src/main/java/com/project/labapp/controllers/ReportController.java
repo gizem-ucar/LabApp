@@ -1,5 +1,6 @@
 package com.project.labapp.controllers;
 
+import com.project.labapp.config.ReportMapper;
 import com.project.labapp.entities.Report;
 import com.project.labapp.requests.ReportCreateRequest;
 import com.project.labapp.requests.ReportUpdateRequest;
@@ -22,8 +23,11 @@ public class ReportController {
 
     private ReportService reportService;
 
-    public ReportController(ReportService reportService){
+    private ReportMapper reportMapper;
+
+    public ReportController(ReportService reportService, ReportMapper reportMapper){
         this.reportService = reportService;
+        this.reportMapper = reportMapper;
     }
 
     @GetMapping
@@ -127,5 +131,21 @@ public class ReportController {
     @DeleteMapping("/{reportId}")
     public Report deleteOneReport(@PathVariable Long reportId){
         return reportService.deleteOneReportById(reportId);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ReportResponse>> searchReports(@RequestParam(required = false) String patientFirstName,
+                                                              @RequestParam(required = false) String patientLastName,
+                                                              @RequestParam(required = false) String patientTC,
+                                                              @RequestParam(required = false) String userFirstName,
+                                                              @RequestParam(required = false) String userLastName) {
+        List<ReportResponse> reportResponses = reportService.searchReports(patientFirstName, patientLastName, patientTC, userFirstName, userLastName);
+        return ResponseEntity.ok(reportResponses);
+    }
+
+    @GetMapping("/sorted")
+    public List<ReportResponse> getAllReportsSortedByDate(@RequestParam Optional<Long> userId, @RequestParam Optional<Long> patientId) {
+        List<Report> sortedReports = reportService.getAllReportsSortedByDate();
+        return reportMapper.mapListToResponse(sortedReports);
     }
 }
