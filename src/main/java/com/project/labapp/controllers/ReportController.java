@@ -35,11 +35,6 @@ public class ReportController {
         return reportService.getAllReports(userId, patientId);
     }
 
-    //@GetMapping("/patient/{patientId}")
-    //public List<Report> getAllReportsByPatientId(@PathVariable Optional<Long> patientId){
-    //    return reportService.getAllReportsByPatientId(patientId);
-    //}
-
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<Report> createOneReport (
             @RequestParam("file") MultipartFile reportImageFile,
@@ -59,64 +54,6 @@ public class ReportController {
         }
     }
 
-    //BYTE İLE VERİ TABANINA KAYDETME
-    /*@PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<String> addReport(@RequestParam("file") MultipartFile reportImageFile, @ModelAttribute ReportCreateRequest newReportRequest) {
-        // Image'ı projeye kaydetmek için servis metodu çağırın
-        String imagePath = reportService.saveImage(reportImageFile);
-
-        // Veritabanına image ile ilgili bilgileri kaydedin
-        newReportRequest.setImagePath(imagePath);
-        reportService.saveReport(newReportRequest);
-
-        return ResponseEntity.ok("Rapor başarıyla eklendi.");
-    }*/
-
-    /*@PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<Report> createOneReport(@ModelAttribute ReportCreateRequest newReportRequest){
-
-        Date reportDate = newReportRequest.getReportDate();
-        newReportRequest.setReportDate(reportDate);
-
-        MultipartFile imageFile = newReportRequest.getReportImageFile();
-        newReportRequest.setReportImageFile(imageFile);
-
-        //String reportName = reportService.saveImage(newReportRequest.getReportImageFile());
-        Report createdReport = reportService.createOneReport(newReportRequest);
-
-        if (createdReport != null)
-        {
-            return ResponseEntity.ok(createdReport);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-        }
-
-    /*@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Report> createOneReport(@RequestParam("fileNo") String fileNo,
-                                                  @RequestParam("userId") Long userId,
-                                                  @RequestParam("patientId") Long patientId,
-                                                  @RequestParam("diagnosisMade") String diagnosisMade,
-                                                  @RequestParam("diagnosisDetail") String diagnosisDetail,
-                                                  @RequestParam("reportDate") Date reportDate,
-                                                  @RequestParam("reportImageFile") MultipartFile reportImageFile) {
-
-        ReportCreateRequest newReportRequest = new ReportCreateRequest();
-        newReportRequest.setFileNo(fileNo);
-        newReportRequest.setUserId(userId);
-        newReportRequest.setDiagnosisMade(diagnosisMade);
-        newReportRequest.setDiagnosisDetail(diagnosisDetail);
-        newReportRequest.setReportDate(reportDate);
-        newReportRequest.setReportImageFile(reportImageFile);
-
-        Report createdReport = reportService.createOneReport(newReportRequest, reportImageFile);
-
-        if (createdReport != null) {
-            return ResponseEntity.ok(createdReport);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    } */
 
     @GetMapping("/{reportId}")
     public ReportResponse getOneReport(@PathVariable Long reportId){
@@ -124,9 +61,11 @@ public class ReportController {
     }
 
     @PutMapping("/{reportId}")
-    public Report updateOneReport(@PathVariable Long reportId, @RequestBody ReportUpdateRequest updateReport){
+    public Report updateOneReport(@PathVariable Long reportId,@RequestParam("file") MultipartFile reportImageFile, @ModelAttribute ReportUpdateRequest updateReport)throws IOException{
+        updateReport.setReportImageFile(reportImageFile);
         return reportService.updateOneReportById(reportId, updateReport);
     }
+
 
     @DeleteMapping("/{reportId}")
     public Report deleteOneReport(@PathVariable Long reportId){

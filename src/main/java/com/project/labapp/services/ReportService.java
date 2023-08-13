@@ -109,28 +109,6 @@ public class ReportService {
         System.out.println("newReportRequest.getUserId()" + newReportRequest.getUserId());
         System.out.println("newReportRequest" + newReportRequest);
 
-        //if (user != null && patient != null){
-            //
-        //}
-
-        /*// Dosya adını düzenleyin, çünkü orijinal dosya adı kullanılmadan önce kontrol edilmeli
-        String originalFilename = StringUtils.cleanPath(newReportRequest.getReportImageFile().getOriginalFilename());
-        String uploadDir = "./images";
-
-        // Dosya yolunu oluşturun
-        String filename = System.currentTimeMillis() + "_" + originalFilename;
-        Path filePath = Paths.get(uploadDir, filename);
-
-        try {
-            // Dosyayı kaydedin
-            Files.createDirectories(filePath.getParent()); // Gerekirse, ebeveyn dizini oluşturun
-            Files.copy(newReportRequest.getReportImageFile().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            // Hata durumunda yapılacak işlemi burada ele alabilirsiniz
-            e.printStackTrace();
-            return null;
-        }*/
-
         byte[] imageBytes = newReportRequest.getReportImageFile().getBytes();
 
         Report toSave = new Report();
@@ -144,41 +122,9 @@ public class ReportService {
         return reportRepository.save(toSave);
     }
 
-    /*public Report createOneReport(ReportCreateRequest newReportRequest, MultipartFile reportImageFile) {
-        User user = userService.getOneUserById(newReportRequest.getUserId());
-        if (user == null)
-            return null;
-        Patient patient = patientService.getOnePatientById(newReportRequest.getPatientId());
-        if (patient == null)
-            return null;
+    public Report updateOneReportById(Long reportId, ReportUpdateRequest updateReport) throws IOException {
 
-        // Dosya yolu oluştur
-        String uploadDir = "./images";
-        String filename = reportImageFile.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir, filename);
-
-        try {
-            // Dosyayı kaydet
-            Files.copy(reportImageFile.getInputStream(), filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        Report toSave = new Report();
-        toSave.setFileNo(newReportRequest.getFileNo());
-        toSave.setReportDate(newReportRequest.getReportDate());
-        toSave.setReportImage(uploadDir + "/" + filename);
-        toSave.setDiagnosisMade(newReportRequest.getDiagnosisMade());
-        toSave.setDiagnosisDetail(newReportRequest.getDiagnosisDetail());
-        toSave.setUser(user);
-        toSave.setPatient(patient);
-        return reportRepository.save(toSave);
-    }*/
-
-    public Report updateOneReportById(Long reportId, ReportUpdateRequest updateReport) {
-
-        byte[] imageBytes = updateReport.getReportImage().getBytes();
+        byte[] imageBytes = updateReport.getReportImageFile().getBytes();
 
         Optional<Report> report = reportRepository.findById(reportId);
         if (report.isPresent()){

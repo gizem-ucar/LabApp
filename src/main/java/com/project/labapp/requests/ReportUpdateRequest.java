@@ -1,6 +1,7 @@
 package com.project.labapp.requests;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ReportUpdateRequest {
@@ -9,6 +10,6 @@ public class ReportUpdateRequest {
 
     String diagnosisDetail;
 
-    String reportImage;
+    MultipartFile reportImageFile;
 
 }
