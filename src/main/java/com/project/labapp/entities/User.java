@@ -26,7 +26,8 @@ public class User {
 
     String userName;
 
-    String userImage;
+    @Column(name = "user_image", columnDefinition = "bytea")
+    byte[] userImage;
 
     String userTC;
 

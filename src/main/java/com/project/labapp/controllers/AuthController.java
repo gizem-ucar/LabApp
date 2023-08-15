@@ -60,7 +60,7 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody UserRegisterRequest registerRequest){
         if (userService.getOneUserByUserName(registerRequest.getUserName()) != null)
             return new ResponseEntity<>("Username already in use.", HttpStatus.BAD_REQUEST);
-        Role role = roleService.getOneRoleById(registerRequest.getRoleId());
+        Role role = roleService.getOneRoleByRoleId(registerRequest.getRoleId());
         if (role == null)
             return null;
         User user = new User();

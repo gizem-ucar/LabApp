@@ -3,10 +3,11 @@ package com.project.labapp.services;
 import com.project.labapp.entities.Role;
 import com.project.labapp.entities.User;
 import com.project.labapp.repos.UserRepository;
-import com.project.labapp.requests.UserRegisterRequest;
+import com.project.labapp.requests.UserUpdateRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,21 +37,25 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public User updateOneUser(Long userId, UserRegisterRequest newUser) {
+    public User updateOneUser(Long userId, UserUpdateRequest updateUser) throws IOException {
+
+        byte[] imageBytes = updateUser.getUserImageFile().getBytes();
+
         Optional<User> user = userRepository.findById(userId);
 
-        Role role = roleService.getOneRoleById(newUser.getRoleId());
+        Role role = roleService.getOneRoleByRoleId(updateUser.getRoleId());
         if (role == null)
             return null;
 
         if (user.isPresent()){
             User foundUser = user.get();
-            foundUser.setUserName(newUser.getUserName());
-            foundUser.setUserTC(newUser.getUserTC());
-            foundUser.setEmail(newUser.getEmail());
-            foundUser.setUserFirstName(newUser.getUserFirstName());
-            foundUser.setUserLastName(newUser.getUserLastName());
-            foundUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+            foundUser.setUserName(updateUser.getUserName());
+            foundUser.setUserTC(updateUser.getUserTC());
+            foundUser.setEmail(updateUser.getEmail());
+            foundUser.setUserFirstName(updateUser.getUserFirstName());
+            foundUser.setUserLastName(updateUser.getUserLastName());
+            foundUser.setUserImage(imageBytes);
+            foundUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
             foundUser.setRole(role);
             userRepository.save(foundUser);
             return foundUser;

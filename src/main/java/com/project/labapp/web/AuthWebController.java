@@ -77,7 +77,7 @@ public class AuthWebController {
     public String register(@ModelAttribute(name = "registerRequest") UserRegisterRequest registerRequest, Model model){
         if (userService.getOneUserByUserName(registerRequest.getUserName()) != null)
             return "Auth/register";
-        Role role = roleService.getOneRoleById(registerRequest.getRoleId());
+        Role role = roleService.getOneRoleByRoleId(registerRequest.getRoleId());
         if (role == null)
             return null;
         User user = new User();
