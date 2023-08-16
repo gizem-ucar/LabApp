@@ -32,7 +32,7 @@
 </div>
 
 <div class="myReports" th:each="report : ${reports}" th:key="${report.reportId}">
-    <a th:href="@{reportDetail}" @click.prevent="onPressedReportDetail(report.reportId)">
+    <a th:href="@{/web/reports/{reportId}(reportId=${report.reportId})}" th:with="reportId=${report.reportId}">
         <div class="report-item">
             <div class="reportImage"><img th:src="${report.reportImage}" alt=""></div>
             <div class="report-information">

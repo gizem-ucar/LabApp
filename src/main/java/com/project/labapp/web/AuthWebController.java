@@ -20,6 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class AuthWebController {
 
@@ -45,12 +47,13 @@ public class AuthWebController {
     }
 
     @RequestMapping(value = "/web/login", method = RequestMethod.POST)
-    public String  login(@ModelAttribute(name = "loginRequest") UserLoginRequest loginRequest, Model model){
+    public String  login(@ModelAttribute(name = "loginRequest") UserLoginRequest loginRequest, HttpSession session, Model model){
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth);
         User user = userService.getOneUserByUserName(loginRequest.getUserName());
+
         AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("Bearer " + jwtToken);
         authResponse.setSuccess(true);
@@ -58,11 +61,15 @@ public class AuthWebController {
         authResponse.setRoleId(user.getRole().getRoleId());
         authResponse.setRoleName(user.getRole().getRoleName());
 
+        // AuthResponse objesini oturum değişkenine kaydet
+        session.setAttribute("authResponse", authResponse);
+
         if (authResponse.getSuccess()){
             return "home";
         }
         // Ana sayfaya yönlendirmek için redirectAttributes ile bilgileri gönder
         model.addAttribute("invalidCredentials", true);
+        model.addAttribute("authResponse", authResponse);
 
         return "Auth/login"; // "redirect:" ile "/web/home" sayfasına yönlendir
     }

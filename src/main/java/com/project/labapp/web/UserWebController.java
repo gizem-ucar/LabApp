@@ -1,22 +1,30 @@
 package com.project.labapp.web;
 
 import com.project.labapp.entities.User;
-import com.project.labapp.requests.UserRegisterRequest;
 import com.project.labapp.requests.UserUpdateRequest;
+import com.project.labapp.responses.AuthResponse;
+import com.project.labapp.responses.ReportResponse;
+import com.project.labapp.services.ReportService;
 import com.project.labapp.services.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserWebController {
 
     private UserService userService;
 
-    public UserWebController(UserService userService){
+    private ReportService reportService;
+
+    public UserWebController(UserService userService, ReportService reportService){
         this.userService = userService;
+        this.reportService = reportService;
     }
 
     @GetMapping("/web/users")
@@ -29,10 +37,23 @@ public class UserWebController {
         return userService.saveOneUser(newUser);
     }
 
-    @GetMapping("/web/users/{userId}")
-    public User getOneUser(@PathVariable Long userId){
-        //custom exception
-        return userService.getOneUserById(userId);
+    @GetMapping("/web/profile")
+    public String getOneUser(HttpSession session, Model model){
+        // HttpSession üzerinden authResponse objesini almak
+        AuthResponse authResponse = (AuthResponse) session.getAttribute("authResponse");
+
+        // AuthResponse objesi boş değilse modelde taşı
+        if (authResponse != null) {
+            Long userId = authResponse.getUserId();
+            User user = userService.getOneUserById(userId);
+            List<ReportResponse> reports = reportService.getAllReports(Optional.of(userId), Optional.empty());
+            model.addAttribute("reports", reports);
+            model.addAttribute("user", user);
+            return "profile";
+        } else {
+            // AuthResponse objesi boşsa gerekli hata işlemleri yapılabilir
+            return "errorPage";
+        }
     }
 
     @PutMapping("/web/users/{userId}")

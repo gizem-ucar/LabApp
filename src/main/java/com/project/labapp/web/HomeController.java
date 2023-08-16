@@ -23,22 +23,22 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/web/profile")
+    /*@GetMapping("/web/profile")
     public String profile(Model model) {
         // Model verilerini hazırlama
         model.addAttribute("message", "Merhaba Dünya!");
 
         // Thymeleaf şablonunu döndürme
         return "profile";
-    }
-    @GetMapping("/web/reportDetail")
+    }*/
+    /*@GetMapping("/web/reports/{reportId}")
     public String reportDetail(Model model) {
         // Model verilerini hazırlama
         model.addAttribute("message", "Merhaba Dünya!");
 
         // Thymeleaf şablonunu döndürme
         return "reportDetail";
-    }
+    }*/
     @GetMapping("/web/reportUpdate")
     public String reportUpdate(Model model) {
         // Model verilerini hazırlama

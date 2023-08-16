@@ -1,19 +1,15 @@
 package com.project.labapp.web;
 
-import com.project.labapp.entities.Report;
 import com.project.labapp.responses.AuthResponse;
 import com.project.labapp.responses.ReportResponse;
-import com.project.labapp.security.JwtUserDetails;
 import com.project.labapp.services.ReportService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,20 +36,36 @@ public class ReportWebController {
             return "reports";
     }
 
-    /*@GetMapping("/web/myReports")
-    public String showMyReports(Model model) {
-        // Giriş yapan kullanıcının kimlik bilgilerini al
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    @GetMapping("/web/reports/{reportId}")
+    public String showReportDetail(@PathVariable Long reportId, Model model) {
+        ReportResponse report = reportService.getOneReportById(reportId);
+        if (report != null) {
+            model.addAttribute("report", report);
+            return "reportDetail"; // Thymeleaf şablon adını dikkate alarak düzenleyin
+        } else {
+            // Handle report not found
+            return "errorPage"; // Örnek olarak hata sayfasına yönlendirme
+        }
+    }
 
-        // Kimlik bilgilerinden kullanıcının id bilgisini al
-        Long userId = ((JwtUserDetails) authentication.getPrincipal()).getId();
 
-        // Kullanıcının raporlarını al ve model nesnesine ekle
-        List<ReportResponse> reports = reportService.getAllReports(Optional.of(userId), Optional.empty());
-        model.addAttribute("reports", reports);
+    @GetMapping("/web/myReports")
+    public String showMyReports(HttpSession session, Model model) {
+        // HttpSession üzerinden authResponse objesini almak
+        AuthResponse authResponse = (AuthResponse) session.getAttribute("authResponse");
 
-        return "myReports"; // my-reports.html ismindeki HTML dosyası
-    } */
+        // AuthResponse objesi boş değilse modelde taşı
+        if (authResponse != null) {
+            Long userId = authResponse.getUserId();
+            // Kullanıcının raporlarını al ve model nesnesine ekle
+            List<ReportResponse> reports = reportService.getAllReports(Optional.of(userId), Optional.empty());
+            model.addAttribute("reports", reports);
+            return "myReports";
+        } else {
+            // AuthResponse objesi boşsa gerekli hata işlemleri yapılabilir
+            return "errorPage";
+        }
+    }
 
 
 }

@@ -37,22 +37,22 @@
             <div><img :src="this.reportDetail.reportImage" alt=""></div>
             <div class="report-information">
                 <div class="file-number">
-                    File number: {{this.reportDetail.fileNo}}
+                    File number: <span th:text="${report.fileNo}"></span>
                 </div>
                 <div class="diagnosisMade">
-                    Diagnosis Made: {{this.reportDetail.diagnosisMade}}
+                    Diagnosis Made: <span th:text="${report.diagnosisMade}"></span>
                 </div>
                 <div class="diagnosisDetail">
-                    Diagnosis Detail: {{this.reportDetail.diagnosisDetail}}
+                    Diagnosis Detail: <span th:text="${report.diagnosisDetail}"></span>
                 </div>
                 <div class="reportDate">
-                    Report Date: {{this.reportDetail.reportDate}}
+                    Report Date: <span th:text="${report.reportDate}"></span>
                 </div>
                 <div class="patientTC">
-                    Patient TC: {{this.reportDetail.patientTC}}
+                    Patient TC: <span th:text="${report.patientTC}"></span>
                 </div>
                 <div class="patientName">
-                    Patient Name: {{this.reportDetail.patientFirstName}} {{this.reportDetail.patientLastName}}
+                    Patient Name: <span th:text="${report.patientFirstName}"></span> <span th:text="${report.patientLastName}"></span>
                 </div>
             </div>
             <div>

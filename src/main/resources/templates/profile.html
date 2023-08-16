@@ -39,33 +39,35 @@
         <div class="profile-image"><img src="@/assets/images/pngdeneme.png" alt=""></div>
         <div class="profile-information">
             <ul>
-                <li>User Name: {{ user.userFirstName }}</li>
-                <li>User Lastname: {{ user.userLastName }}</li>
-                <li>User TC: {{ user.userTC }}</li>
-                <li>User Email: {{ user.email }}</li>
+                <li>User Name: <span th:text="${user.userFirstName}"></span></li>
+                <li>User Lastname: <span th:text="${user.userLastName}"></span></li>
+                <li>User TC: <span th:text="${user.userTC}"></span></li>
+                <li>User Email: <span th:text="${user.email}"></span></li>
             </ul>
         </div>
     </div>
     <div class="profile-reports">
-        <div class="profile-report-item" v-for="report in reportList" :key="report.reportId">
-            <div class="reportImage"><img src="@/assets/images/pngdeneme.png" alt=""></div>
-            <div class="report-information">
-                <div class="file-number">
-                    File number: {{report.fileNo}}
+        <div class="profile-report-item" th:each="report : ${reports}" th:key="${report.reportId}">
+            <a th:href="@{/web/reports/{reportId}(reportId=${report.reportId})}" th:with="reportId=${report.reportId}">
+                <div class="reportImage"><img th:src="${report.reportImage}" alt=""></div>
+                <div class="report-information">
+                    <div class="file-number">
+                        File number: <span th:text="${report.fileNo}"></span>
+                    </div>
+                    <div class="diagnosisMade">
+                        Diagnosis Made: <span th:text="${report.diagnosisMade}"></span>
+                    </div>
+                    <div class="reportDate">
+                        Report Date: <span th:text="${report.reportDate}"></span>
+                    </div>
+                    <div class="patientTC">
+                        Patient TC: <span th:text="${report.patientTC}"></span>
+                    </div>
+                    <div class="patientName">
+                        Patient Name: <span th:text="${report.patientFirstName + ' ' + report.patientLastName}"></span>
+                    </div>
                 </div>
-                <div class="diagnosisMade">
-                    Diagnosis Made: {{report.diagnosisMade}}
-                </div>
-                <div class="reportDate">
-                    Report Date: {{report.reportDate}}
-                </div>
-                <div class="patientTC">
-                    Patient TC: {{ report.patientTC }}
-                </div>
-                <div class="patientName">
-                    Patient Name: {{ report.patientFirstName }} {{ report.patientLastName }}
-                </div>
-            </div>
+            </a>
         </div>
     </div>
 
