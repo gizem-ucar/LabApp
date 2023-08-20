@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Profil</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link th:href="@{/static/style.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -22,7 +22,7 @@
                 </div>
                 <div class="header-profile">
                     <a th:href="@{profile}" >
-                        <i class="fa-regular fa-user"></i>
+                        <i class="fas fa-user"></i>
                         Profile
                     </a>
                 </div>
@@ -34,9 +34,12 @@
 <div class="profile">
     <div class="position-right">
         <button th:href="@{reportUpdate}" class="button-black">Düzenle</button>
+        <a class="button-black"  th:href="@{/web/patientAdd}">
+            Yeni Hasta Ekle
+        </a>
     </div>
     <div class="profile-information-button">
-        <div class="profile-image"><img src="@/assets/images/pngdeneme.png" alt=""></div>
+        <div class="profile-image"><img th:src="@{'data:image/png;base64,' + ${#strings.toString(base64Image)}}" alt=""></div>
         <div class="profile-information">
             <ul>
                 <li>User Name: <span th:text="${user.userFirstName}"></span></li>
@@ -47,9 +50,9 @@
         </div>
     </div>
     <div class="profile-reports">
-        <div class="profile-report-item" th:each="report : ${reports}" th:key="${report.reportId}">
-            <a th:href="@{/web/reports/{reportId}(reportId=${report.reportId})}" th:with="reportId=${report.reportId}">
-                <div class="reportImage"><img th:src="${report.reportImage}" alt=""></div>
+        <div th:each="report : ${reports}" th:key="${report.reportId}">
+            <a class="profile-report-item" th:href="@{/web/reports/{reportId}(reportId=${report.reportId})}" th:with="reportId=${report.reportId}">
+                <div class="reportImage" th:if="${false}"><img th:src="${report.reportImage}" alt=""></div>
                 <div class="report-information">
                     <div class="file-number">
                         File number: <span th:text="${report.fileNo}"></span>

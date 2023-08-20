@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Raporlarım</title>
+    <title>Hasta ekleme</title>
     <link th:href="@{/static/style.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -31,42 +31,44 @@
     </div>
 </div>
 
-<div class="elemanter-container">
-    <div class="elemanter-row">
-<div class="myReports">
-    <div class="report-item" th:each="report : ${reports}" th:key="${report.reportId}">
-        <a th:href="@{/web/reports/{reportId}(reportId=${report.reportId})}" th:with="reportId=${report.reportId}">
-        <div class="reportImage"  th:if="${false}">
-            <img th:src="${report.reportImage}" alt="">
-        </div>
+<div class="report-detail">
+    <div class="report-detail-container">
+        <div class="report-detail-row">
             <div class="report-information">
+                <form th:action="@{/web/patientAdd}"
+                      th:object="${newPatient}" method="post" enctype="multipart/form-data">
                 <div class="form-text">
-                    File number: <span th:text="${report.fileNo}"></span>
+                    Patient TC:
+                    <input type="text" name="patientTC" id="patientTC">
                 </div>
                 <div class="form-text">
-                    Diagnosis Made: <span th:text="${report.diagnosisMade}"></span>
+                    Patient First Name:
+                    <input type="text" name="patientFirstName" id="patientFirstName">
                 </div>
                 <div class="form-text">
-                    Report Date: <span th:text="${report.reportDate}"></span>
+                    Patient Last Name:
+                    <input type="text" name="patientLastName" id="patientLastName">
                 </div>
-                <div class="form-text">
-                    Patient TC: <span th:text="${report.patientTC}"></span>
-                </div>
-                <div class="form-text">
-                    Patient Name: <span th:text="${report.patientFirstName + ' ' + report.patientLastName}"></span>
-                </div>
+                    <div>
+                        <button class="button" type="submit">Ekle</button>
+                    </div>
+                </form>
             </div>
-        </a>
+
         </div>
-</div>
-</div>
+    </div>
+
 </div>
 
 <footer>
     <div class="footer-logo">
-        <a th:href="@{home}">Laboratory Reporting</a></div>
+        <a th:href="@{home}">
+            Laboratory Reporting
+        </a>
+    </div>
     <div></div>
 </footer>
+
 
 </body>
 </html>

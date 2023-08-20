@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Hastalar</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link th:href="@{/static/style.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="header">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="header-profile">
                     <a th:href="@{profile}" >
-                        <i class="fa-regular fa-user"></i>
+                        <i class="fas fa-user"></i>
                         Profile
                     </a>
                 </div>
@@ -30,25 +30,27 @@
     </div>
 </div>
 
+<div class="elemanter-container">
+    <div class="elemanter-row">
 <div class="patients">
     <div class="patient-item" th:each="patient : ${patients}" th:key="${patient.patientTC}">
-        <a th:href="@{reportDetail}" >
-            <div class="patientImage"><img src="@/assets/images/pngdeneme.png" alt=""></div>
-            <div class="patient-information">
-                <div class="patientTC">
+        <a th:href="@{/web/patients/{patientId}(patientId=${patient.patientId})}" th:with="patientId=${patient.patientId}">
+        <div class="patient-information">
+                <div class="form-text">
                     Patient TC: <span th:text="${patient.patientTC}"></span>
                 </div>
-                <div class="patientFirstName">
+                <div class="form-text">
                     Patient Name: <span th:text="${patient.patientFirstName}"></span>
                 </div>
-                <div class="patientLastName">
+                <div class="form-text">
                     Patient Surname: <span th:text="${patient.patientLastName}"></span>
                 </div>
             </div>
         </a>
     </div>
 </div>
-
+</div>
+</div>
 <footer>
     <div class="footer-logo">
         <a th:href="@{home}">Laboratory Reporting</a>

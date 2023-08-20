@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Rapor</title>
+    <title>Rapor Ekleme</title>
     <link th:href="@{/static/style.css}" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -35,24 +35,30 @@
         <div class="report-detail-row">
             <div><img :src="this.reportDetail.reportImage" alt=""></div>
             <div class="report-information">
-                <form th:action="@{/web/reportUpdate/{reportId}(reportId=${report.reportId})}"
-                      th:object="${updateReport}"
-                      method="post" enctype="multipart/form-data">
+                <form th:action="@{/web/createReport/{patientId}(patientId=${patientId})}"
+                      th:object="${newReportRequest}" method="post" enctype="multipart/form-data">
+                    <div class="form-text">
+                        File No:
+                        <input type="text" name="fileNo" id="fileNo">
+                    </div>
                 <div class="form-text">
                     Diagnosis Made:
                     <input type="text" name="diagnosisMade" id="diagnosisMade">
                 </div>
                 <div class="form-text">
                     Diagnosis Detail:
-                    <input type="text" name="diagnosisDetail" id="diagnosisDetail">
+                    <input type="text" name="diagnosisDetail" id="diagnosisDetail" >
                 </div>
+                    <div class="form-text">
+                        Rapor Tarihi:
+                        <input type="text" name="reportDate" id="reportDate">
+                    </div>
                 <div class="form-text">
                     Rapor fotoğrafı:
                     <input class="form-control" type="file" id="reportImageFile" name="reportImageFile">
                 </div>
-                    <input type="hidden" name="_method" value="PUT">
                     <div>
-                        <button class="button" type="submit">Düzenle</button>
+                        <button class="button" type="submit">Ekle</button>
                     </div>
                 </form>
             </div>

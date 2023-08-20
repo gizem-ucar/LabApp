@@ -44,18 +44,40 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
 
         Role role = roleService.getOneRoleByRoleId(updateUser.getRoleId());
-        if (role == null)
-            return null;
+
 
         if (user.isPresent()){
             User foundUser = user.get();
+            if (updateUser.getUserName() == null){
+                foundUser.setUserName(user.get().getUserName());
+            }
             foundUser.setUserName(updateUser.getUserName());
+            if (updateUser.getUserTC() == null){
+                foundUser.setUserTC(user.get().getUserTC());
+            }
             foundUser.setUserTC(updateUser.getUserTC());
+            if (updateUser.getEmail() == null){
+                foundUser.setEmail(user.get().getEmail());
+            }
             foundUser.setEmail(updateUser.getEmail());
+            if (updateUser.getUserFirstName() == null){
+                foundUser.setUserFirstName(user.get().getUserFirstName());
+            }
             foundUser.setUserFirstName(updateUser.getUserFirstName());
+            if (updateUser.getUserLastName() == null){
+                foundUser.setUserLastName(user.get().getUserLastName());
+            }
             foundUser.setUserLastName(updateUser.getUserLastName());
+            if (updateUser.getUserImageFile() == null){
+                foundUser.setUserImage(user.get().getUserImage());
+            }
             foundUser.setUserImage(imageBytes);
+            if (updateUser.getPassword() == null){
+                foundUser.setPassword(user.get().getPassword());
+            }
             foundUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+            if (role == null)
+                foundUser.setRole(user.get().getRole());
             foundUser.setRole(role);
             userRepository.save(foundUser);
             return foundUser;

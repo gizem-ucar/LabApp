@@ -39,13 +39,13 @@ public class HomeController {
         // Thymeleaf şablonunu döndürme
         return "reportDetail";
     }*/
-    @GetMapping("/web/reportUpdate")
+    /*@GetMapping("/web/reportUpdate")
     public String reportUpdate(Model model) {
         // Model verilerini hazırlama
         model.addAttribute("message", "Merhaba Dünya!");
 
         // Thymeleaf şablonunu döndürme
-        return "reportDetail";
-    }
+        return "reportUpdate";
+    }*/
 
 }

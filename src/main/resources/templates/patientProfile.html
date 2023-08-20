@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient</title>
+    <link th:href="@{/static/style.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="header">
+  <div class="elemanter-container">
+    <div class="elemanter-row">
+      <section>
+        <div class="header-logo">Laboratory Reporting</div>
+        <div class="header-menu">
+          <ul>
+            <a th:href="@{home}" ><li>Home</li></a>
+            <a th:href="@{myReports}" ><li>My Reports</li></a>
+            <a th:href="@{reports}" ><li>Reports</li></a>
+            <a th:href="@{patients}" ><li>Patients</li></a>
+          </ul>
+        </div>
+        <div class="header-profile">
+          <a th:href="@{profile}" >
+            <i class="fas fa-user"></i>
+            Profile
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="profile">
+  <div class="position-right">
+      <a class="button-black" th:href="@{/web/patientUpdate/{patientId}(patientId=${patient.patientId})}" th:with="patientId=${patient.patientId}">
+        Düzenle
+      </a>
+      <a class="button-black" th:href="@{/web/createReport/{patientId}(patientId=${patient.patientId})}" th:with="patientId=${patient.patientId}">
+        Yeni Rapor Ekle
+      </a>
+  </div>
+  <div class="profile-information-button">
+    <div class="profile-information">
+      <ul>
+        <li>Patient Name: <span th:text="${patient.patientFirstName}"></span></li>
+        <li>Patient Lastname: <span th:text="${patient.patientLastName}"></span></li>
+        <li>Patient TC: <span th:text="${patient.patientTC}"></span></li>
+      </ul>
+    </div>
+  </div>
+  <form th:action="@{/web/patientDelete/__${patient.patientId}__}" method="post">
+    <button class="button-black" type="submit" onclick="return confirm('Bu hasta bilgisini silmek istediğinizden emin misiniz?')">Sil</button>
+  </form>
+  <div class="profile-reports">
+    <div th:each="report : ${reports}" th:key="${report.reportId}">
+      <a class="profile-report-item" th:href="@{/web/reports/{reportId}(reportId=${report.reportId})}" th:with="reportId=${report.reportId}">
+        <div class="reportImage" th:if="${false}"><img th:src="${report.reportImage}" alt=""></div>
+        <div class="report-information">
+          <div class="file-number">
+            File number: <span th:text="${report.fileNo}"></span>
+          </div>
+          <div class="diagnosisMade">
+            Diagnosis Made: <span th:text="${report.diagnosisMade}"></span>
+          </div>
+          <div class="reportDate">
+            Report Date: <span th:text="${report.reportDate}"></span>
+          </div>
+          <div class="patientTC">
+            Patient TC: <span th:text="${report.patientTC}"></span>
+          </div>
+          <div class="patientName">
+            Patient Name: <span th:text="${report.patientFirstName + ' ' + report.patientLastName}"></span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-logo">
+    <a th:href="@{home}">Laboratory Reporting</a>
+  </div>
+  <div></div>
+</footer>
+
+</body>
+</html>
