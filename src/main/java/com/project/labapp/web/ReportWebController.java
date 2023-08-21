@@ -1,5 +1,6 @@
 package com.project.labapp.web;
 
+import com.project.labapp.config.ReportMapper;
 import com.project.labapp.entities.Report;
 import com.project.labapp.requests.ReportCreateRequest;
 import com.project.labapp.requests.ReportUpdateRequest;
@@ -25,9 +26,11 @@ import java.util.Optional;
 public class ReportWebController {
 
     ReportService reportService;
+    ReportMapper reportMapper;
 
-    public ReportWebController(ReportService reportService){
+    public ReportWebController(ReportService reportService, ReportMapper reportMapper){
         this.reportService = reportService;
+        this.reportMapper = reportMapper;
     }
 
     @GetMapping("/web/reports")
@@ -149,6 +152,26 @@ public class ReportWebController {
     public String deleteOneReport(@PathVariable Long reportId, Model model){
         reportService.deleteOneReportById(reportId);
         return "redirect:/web/reports";
+    }
+
+    @GetMapping("/web/reports/search")
+    public String searchReports(@RequestParam(required = false) String patientFirstName,
+                                                              @RequestParam(required = false) String patientLastName,
+                                                              @RequestParam(required = false) String patientTC,
+                                                              @RequestParam(required = false) String userFirstName,
+                                                              @RequestParam(required = false) String userLastName,
+                                                              Model model) {
+        List<ReportResponse> reportResponses = reportService.searchReports(patientFirstName, patientLastName, patientTC, userFirstName, userLastName);
+        model.addAttribute("reports", reportResponses);
+        return "reports";
+    }
+
+    @GetMapping("/web/reports/sorted")
+    public String getAllReportsSortedByDate(@RequestParam Optional<Long> userId, @RequestParam Optional<Long> patientId, Model model) {
+        List<Report> reports = reportService.getAllReportsSortedByDate();
+        List<ReportResponse> sortedReports = reportMapper.mapListToResponse(reports);
+        model.addAttribute("reports",sortedReports);
+        return "reports";
     }
 
 

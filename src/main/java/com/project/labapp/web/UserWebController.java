@@ -6,12 +6,12 @@ import com.project.labapp.responses.AuthResponse;
 import com.project.labapp.responses.ReportResponse;
 import com.project.labapp.services.ReportService;
 import com.project.labapp.services.UserService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -62,11 +62,20 @@ public class UserWebController {
         }
     }
 
-    @PutMapping("/web/users/{userId}")
-    public User updateOneUser(@PathVariable Long userId, @RequestBody UserUpdateRequest newUser) throws IOException {
-        return userService.updateOneUser(userId, newUser);
+    @GetMapping("/web/profileUpdate/{userId}")
+    public String getProfileUpdate(@PathVariable Long userId,Model model) {
+        model.addAttribute("userId",userId);
+        return "profileUpdate";
     }
 
+    @PostMapping(consumes = "multipart/form-data",path ="/web/profileUpdate/{userId}")
+    public String updateOneUser(@PathVariable Long userId,
+                                @Valid @ModelAttribute UserUpdateRequest newUser,
+                                Model model) throws IOException {
+        User user = userService.updateOneUser(userId, newUser);
+        model.addAttribute("user",user);
+        return "redirect:/web/profile";
+    }
     @DeleteMapping("/web/users/{userId}")
     public void deleteOneUser(@PathVariable Long userId) {
         userService.deleteById(userId);

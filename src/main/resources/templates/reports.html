@@ -24,6 +24,7 @@
                         <i class="fas fa-user"></i>
                         Profile
                     </a>
+                    <a th:href="@{/web/logout}" >Çıkış Yap</a>
                 </div>
             </section>
         </div>
@@ -33,7 +34,7 @@
 <div  class="reportFilter elemanter-container">
     <div class="elemanter-row">
         <h3>Rapor Arama</h3>
-        <form @submit.prevent="searchReports">
+        <form action="/web/reports/search" method="get">
             <label for="patientFirstName">Hasta Adı:</label>
             <input v-model="patientFirstName" type="text" id="patientFirstName" name="patientFirstName">
 
@@ -51,7 +52,12 @@
 
             <button type="submit" class="button-black">Ara</button>
 
-            <button @click="sortedReport()" class="button-black">Tarihe göre sırala</button>
+
+
+        </form>
+
+        <form th:action="@{/web/reports/sorted}" method="get">
+            <button  type="submit" class="button-black">Tarihe göre sırala</button>
         </form>
     </div>
 </div>

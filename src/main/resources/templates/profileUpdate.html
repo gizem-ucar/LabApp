@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+    <link th:href="@{/static/style.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="header">
+    <div class="elemanter-container">
+        <div class="elemanter-row">
+            <section>
+                <div class="header-logo">Laboratory Reporting</div>
+                <div class="header-menu">
+                    <ul>
+                        <a th:href="@{/web/home}" ><li>Home</li></a>
+                        <a th:href="@{/web/myReports}" ><li>My Reports</li></a>
+                        <a th:href="@{/web/reports}" ><li>Reports</li></a>
+                        <a th:href="@{/web/patients}" ><li>Patients</li></a>
+                    </ul>
+                </div>
+                <div class="header-profile">
+                    <a th:href="@{profile}" >
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    <a th:href="@{/web/logout}" >Çıkış Yap</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div class="profile profile-update">
+
+    <div class="profile-information-button">
+        <div class="profile-image" th:if="${false}" v-if="imageUrl"><img v-show="imageUrl" :src="imageUrl"/></div>
+        <div class="profile-image" v-else ><img src="../assets/images/profileAvatar.png" alt=""></div>
+        <div class="profile-information">
+            <form th:action="@{/web/profileUpdate/{userId}(userId=${userId})}"
+                  th:object="${newUser}"
+                  method="post" enctype="multipart/form-data">
+            <ul>
+                <li>Name:
+                    <input type="text" name="userFirstName" id="userFirstName">
+                </li>
+                <li>Lastname:
+                    <input type="text" name="userLastName" id="userLastName">
+                </li>
+                <li>User name:
+                    <input type="text" name="userName" id="userName">
+                </li>
+                <li>User TC:
+                    <input type="text" name="userTC" id="userTC">
+                </li>
+                <li>User Email:
+                    <input type="text" name="email" id="email">
+                </li>
+                <li>User photo:
+                    <!-- <input type="text" name="" id=""> -->
+                    <input class="form-control" type="file" id="userImageFile" name="userImageFile" @change="handleFileChange">
+                </li>
+                <li>User role:
+                    <input  v-model="updateUser.roleId" type="text" name="roleId" id="roleId">
+                </li>
+                <li>User password:
+                    <input  v-model="updateUser.password" type="text" name="password" id="password">
+                </li>
+            </ul>
+                <div class="position-right">
+                    <button class="button-black" type="submit">Düzenle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-logo">
+        <a th:href="@{home}">
+            Laboratory Reporting
+        </a>
+    </div>
+    <div></div>
+</footer>
+
+</body>
+</html>
