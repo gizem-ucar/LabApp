@@ -7,12 +7,9 @@ import com.project.labapp.requests.ReportUpdateRequest;
 import com.project.labapp.responses.AuthResponse;
 import com.project.labapp.responses.ReportResponse;
 import com.project.labapp.services.ReportService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -34,55 +31,79 @@ public class ReportWebController {
     }
 
     @GetMapping("/web/reports")
-    public String reports(@RequestParam Optional<Long> userId, @RequestParam Optional<Long> patientId, Model model) {
-        List<ReportResponse> reports = reportService.getAllReports(userId, patientId);
-        model.addAttribute("reports", reports);
-        if (userId.isPresent() && patientId.isPresent()){
-            return "reports";
-        }else if (userId.isPresent()){
-            return "myReports";
-        }else if(patientId.isPresent()){
-            return "reports";
-        }else
-            return "reports";
+    public String reports(@RequestParam Optional<Long> userId, @RequestParam Optional<Long> patientId, HttpSession session, Model model) {
+
+        AuthResponse authResponse = (AuthResponse) session.getAttribute("authResponse");
+
+        if (authResponse != null) {
+            List<ReportResponse> reports = reportService.getAllReports(userId, patientId);
+            model.addAttribute("reports", reports);
+            if (userId.isPresent() && patientId.isPresent()){
+                return "reports";
+            }else if (userId.isPresent()){
+                return "myReports";
+            }else if(patientId.isPresent()){
+                return "reports";
+            }else
+                return "reports";
+        }else {
+            return "Auth/login";
+        }
+
+
     }
 
     @GetMapping("/web/reportUpdate/{reportId}")
-    public String getReportUpdate(@PathVariable Long reportId, Model model) {
-        ReportResponse report = reportService.getOneReportById(reportId);
-        if (report != null) {
-            model.addAttribute("report", report);
-            return "reportUpdate"; // Thymeleaf şablon adını dikkate alarak düzenleyin
-        } else {
-            // Handle report not found
-            return "errorPage"; // Örnek olarak hata sayfasına yönlendirme
+    public String getReportUpdate(@PathVariable Long reportId, HttpSession session, Model model) {
+        AuthResponse authResponse = (AuthResponse) session.getAttribute("authResponse");
+
+        if (authResponse != null) {
+            ReportResponse report = reportService.getOneReportById(reportId);
+            if (report != null) {
+                model.addAttribute("report", report);
+                return "reportUpdate"; // Thymeleaf şablon adını dikkate alarak düzenleyin
+            } else {
+                // Handle report not found
+                return "errorPage"; // Örnek olarak hata sayfasına yönlendirme
+            }
         }
+        return "Auth/login";
     }
 
     @GetMapping("/web/createReport/{patientId}")
-    public String getReportAdd(@PathVariable Long patientId, Model model) {
-        model.addAttribute("patientId", patientId);
-        return "reportAdd";
+    public String getReportAdd(@PathVariable Long patientId, HttpSession session, Model model) {
+        AuthResponse authResponse = (AuthResponse) session.getAttribute("authResponse");
+
+        if (authResponse != null) {
+            model.addAttribute("patientId", patientId);
+            return "reportAdd";
+        }
+        return "Auth/login";
     }
 
     @GetMapping("/web/reports/{reportId}")
-    public String showReportDetail(@PathVariable Long reportId, Model model) {
-        ReportResponse report = reportService.getOneReportById(reportId);
+    public String showReportDetail(@PathVariable Long reportId, HttpSession session, Model model) {
+        AuthResponse authResponse = (AuthResponse) session.getAttribute("authResponse");
 
-        if (report != null) {
-            byte[] reportImage = report.getReportImage();
-            if (reportImage != null) {
-                String base64Image = Base64.getEncoder().encodeToString(reportImage);
-                model.addAttribute("base64Image", base64Image);
+        if (authResponse != null) {
+            ReportResponse report = reportService.getOneReportById(reportId);
+
+            if (report != null) {
+                byte[] reportImage = report.getReportImage();
+                if (reportImage != null) {
+                    String base64Image = Base64.getEncoder().encodeToString(reportImage);
+                    model.addAttribute("base64Image", base64Image);
+                    model.addAttribute("report", report);
+                    return "reportDetail";
+                }
                 model.addAttribute("report", report);
-                return "reportDetail";
+                return "reportDetail"; // Thymeleaf şablon adını dikkate alarak düzenleyin
+            } else {
+                // Handle report not found
+                return "errorPage"; // Örnek olarak hata sayfasına yönlendirme
             }
-            model.addAttribute("report", report);
-            return "reportDetail"; // Thymeleaf şablon adını dikkate alarak düzenleyin
-        } else {
-            // Handle report not found
-            return "errorPage"; // Örnek olarak hata sayfasına yönlendirme
         }
+        return "Auth/login";
     }
 
 
@@ -143,8 +164,7 @@ public class ReportWebController {
             model.addAttribute("reports", reports);
             return "myReports";
         } else {
-            // AuthResponse objesi boşsa gerekli hata işlemleri yapılabilir
-            return "errorPage";
+            return "Auth/login";
         }
     }
 

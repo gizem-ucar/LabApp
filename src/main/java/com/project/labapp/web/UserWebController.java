@@ -29,15 +29,6 @@ public class UserWebController {
         this.reportService = reportService;
     }
 
-    @GetMapping("/web/users")
-    public List<User> getAllUsers(){
-        return userService.getAllUsers();
-    }
-
-    @PostMapping("/web/users")
-    public User createUser(@RequestBody User newUser){
-        return userService.saveOneUser(newUser);
-    }
 
     @GetMapping("/web/profile")
     public String getOneUser(HttpSession session, Model model){
@@ -49,8 +40,10 @@ public class UserWebController {
             Long userId = authResponse.getUserId();
             User user = userService.getOneUserById(userId);
             byte[] userImage = user.getUserImage();
-            String base64Image = Base64.getEncoder().encodeToString(userImage);
-            model.addAttribute("base64Image",base64Image);
+            if (userImage != null){
+                String base64Image = Base64.getEncoder().encodeToString(userImage);
+                model.addAttribute("base64Image",base64Image);
+            }
 
             List<ReportResponse> reports = reportService.getAllReports(Optional.of(userId), Optional.empty());
             model.addAttribute("reports", reports);
@@ -58,14 +51,19 @@ public class UserWebController {
             return "profile";
         } else {
             // AuthResponse objesi boşsa gerekli hata işlemleri yapılabilir
-            return "errorPage";
+            return "Auth/login";
         }
     }
 
     @GetMapping("/web/profileUpdate/{userId}")
-    public String getProfileUpdate(@PathVariable Long userId,Model model) {
-        model.addAttribute("userId",userId);
-        return "profileUpdate";
+    public String getProfileUpdate(@PathVariable Long userId, HttpSession session, Model model) {
+        AuthResponse authResponse = (AuthResponse) session.getAttribute("authResponse");
+
+        if (authResponse != null) {
+            model.addAttribute("userId",userId);
+            return "profileUpdate";
+        }
+        return "Auth/login";
     }
 
     @PostMapping(consumes = "multipart/form-data",path ="/web/profileUpdate/{userId}")

@@ -78,6 +78,8 @@ public class WebSecurityConfig {
                 .permitAll()
                 .antMatchers("/static/**")
                 .permitAll()
+                .antMatchers("/static/images/**")
+                .permitAll()
                 .antMatchers("/images/**")
                 .permitAll()
                 .antMatchers(HttpMethod.GET,"/reports")

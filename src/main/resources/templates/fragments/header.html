@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="header">
+    <div class="elemanter-container">
+        <div class="elemanter-row">
+            <section>
+                <div class="header-logo">Laboratory Reporting</div>
+                <div class="header-menu">
+                    <ul>
+                        <a th:href="@{home}" ><li>Home</li></a>
+                        <a th:href="@{myReports}" ><li>My Reports</li></a>
+                        <a th:href="@{reports}" ><li>Reports</li></a>
+                        <a th:href="@{patients}" ><li>Patients</li></a>
+                    </ul>
+                </div>
+                <div class="header-profile">
+                    <a th:href="@{profile}" >
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
